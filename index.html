@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lancia il Tuo Brand Sostenibile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .scenario {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .progress-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .progress-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A, #CDDC39);
+            border-radius: 15px;
+            transition: width 1.2s ease;
+            position: relative;
+        }
+
+        .progress-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+            color: white;
+            font-size: 1.1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .selections-count {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #666;
+        }
+
+        .game-area {
+            padding: 40px;
+        }
+
+        .category {
+            margin-bottom: 30px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #673AB7, #9C27B0);
+            color: white;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .card {
+            padding: 25px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .card:nth-child(even) {
+            border-left: 1px solid #e0e0e0;
+        }
+
+        .card:hover {
+            background: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card.selected {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border-color: #4CAF50;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #333;
+        }
+
+        .card-description {
+            color: #666;
+            font-size: 0.95rem;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .card.selected .card-impact {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .results-section {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .badge.excellent {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+        }
+
+        .badge.good {
+            background: linear-gradient(135deg, #FF9800, #FFB74D);
+            color: white;
+        }
+
+        .badge.improvement {
+            background: linear-gradient(135deg, #f44336, #FF5722);
+            color: white;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            min-width: 150px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, #757575, #616161);
+        }
+
+        .feedback-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .choices-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .choices-summary h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .choice-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .choice-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .choice-text {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+
+        .choice-points {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .game-area { padding: 20px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .card:nth-child(even) { border-left: none; border-top: 1px solid #e0e0e0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Lancia il Tuo Brand</h1>
+            <p style="font-size: 1.2rem;">Simulatore di Imprenditoria Sostenibile</p>
+            <div class="scenario">
+                <strong>🎯 La Tua Missione:</strong> Stai lanciando un nuovo brand di abbigliamento. 
+                Devi fare <strong>5 scelte strategiche</strong> che determineranno quanto il tuo brand sarà sostenibile. 
+                Ogni scelta influenza il tuo <strong>Punteggio Sostenibilità</strong> da 0 a 100!
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-container">
+                <div class="progress-title">🌱 Punteggio Sostenibilità</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">
+                        <div class="progress-value" id="progressValue">0</div>
+                    </div>
+                </div>
+                <div class="selections-count" id="selectionsCount">
+                    Scelte fatte: 0/5
+                </div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <!-- CATEGORIA 1: CANALE DI VENDITA -->
+            <div class="category">
+                <div class="category-header">
+                    🏬 CANALE DI VENDITA - Come vendi i tuoi prodotti?
+                </div>
+                <div class="cards-grid">
+                    <div class="card" data-category="channel" data-points="12">
+                        <div class="card-icon">🏪</div>
+                        <div class="card-title">Negozio Fisico</div>
+                        <div class="card-description">Store tradizionale in centro città con vetrine attraenti</div>
+                    </div>
+                    <div class="card" data-category="channel" data-points="18">
+                        <div class="card-icon">💻</div>
+                        <div class="card-title">E-commerce Only</div>
+                        <div class="card-description">Vendite solo online, nessun negozio fisico</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORIA 2: GESTIONE MAGAZZINO -->
+            <div class="category">
+                <div class="category-header">
+                    📦 GESTIONE MAGAZZINO - Come organizzi la logistica?
+                </div>
+                <div class="cards-grid">
+                    <div class="card" data-category="warehouse" data-points="8">
+                        <div class="card-icon">👥</div>
+                        <div class="card-title">Magazzino Manuale</div>
+                        <div class="card-description">Gestione tradizionale con personale dedicato</div>
+                    </div>
+                    <div class="card" data-category="warehouse" data-points="22">
+                        <div class="card-icon">🤖</div>
+                        <div class="card-title">Magazzino Automatizzato</div>
+                        <div class="card-description">Tecnologia avanzata, ottimizzazione spazi e energie</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORIA 3: FONTE ENERGETICA -->
+            <div class="category">
+                <div class="category-header">
+                    ⚡ ENERGIA - Quale fonte scegli per alimentare le operazioni?
+                </div>
+                <div class="cards-grid">
+                    <div class="card" data-category="energy" data-points="15">
+                        <div class="card-icon">🌞</div>
+                        <div class="card-title">Energia Solare</div>
+                        <div class="card-description">Pannelli solari per uffici e magazzini</div>
+                    </div>
+                    <div class="card" data-category="energy" data-points="19">
+                        <div class="card-icon">💨</div>
+                        <div class="card-title">Energia Eolica</div>
+                        <div class="card-description">Contratto con parco eolico, energia più stabile</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORIA 4: MATERIALI -->
+            <div class="category">
+                <div class="category-header">
+                    🧵 MATERIALI - Che tessuti usi per i tuoi capi?
+                </div>
+                <div class="cards-grid">
+                    <div class="card" data-category="materials" data-points="11">
+                        <div class="card-icon">🌿</div>
+                        <div class="card-title">Cotone Biologico</div>
+                        <div class="card-description">Cotone certificato organico, no pesticidi</div>
+                    </div>
+                    <div class="card" data-category="materials" data-points="16">
+                        <div class="card-icon">♻️</div>
+                        <div class="card-title">Tessuti Riciclati</div>
+                        <div class="card-description">Fibre da bottiglie di plastica e scarti tessili</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATEGORIA 5: PACKAGING -->
+            <div class="category">
+                <div class="category-header">
+                    📮 PACKAGING - Come confezioni i prodotti?
+                </div>
+                <div class="cards-grid">
+                    <div class="card" data-category="packaging" data-points="13">
+                        <div class="card-icon">📄</div>
+                        <div class="card-title">Packaging Compostabile</div>
+                        <div class="card-description">Buste e scatole che si decompontono naturalmente</div>
+                    </div>
+                    <div class="card" data-category="packaging" data-points="9">
+                        <div class="card-icon">📦</div>
+                        <div class="card-title">Packaging Minimale</div>
+                        <div class="card-description">Solo l'essenziale, niente fronzoli o eccessi</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" id="showResultsBtn" disabled>🎯 Vedi Risultato Finale</button>
+                <button class="btn secondary" id="resetBtn">🔄 Ricomincia</button>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection">
+            <h2 style="color: #4CAF50; margin-bottom: 20px;">🎉 Il Tuo Brand è Pronto!</h2>
+            
+            <div class="final-score" id="finalScore">0/100</div>
+            
+            <div class="badge" id="badge">Badge Sostenibilità</div>
+            
+            <div class="choices-summary" id="choicesSummary">
+                <h4>🌟 Le Tue Scelte Strategiche</h4>
+                <div id="choicesList"></div>
+            </div>
+            
+            <div class="feedback-text" id="feedbackText">
+                Analisi del tuo brand...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class BrandLauncher {
+            constructor() {
+                this.selections = {};
+                this.totalPoints = 0;
+                this.maxPoints = 100; // 22+19+18+16+13 = 88 max possibili
+                this.requiredSelections = 5;
+                
+                this.initializeGame();
+            }
+
+            initializeGame() {
+                this.setupEventListeners();
+                this.updateProgress();
+            }
+
+            setupEventListeners() {
+                const cards = document.querySelectorAll('.card');
+                const showResultsBtn = document.getElementById('showResultsBtn');
+                const resetBtn = document.getElementById('resetBtn');
+
+                cards.forEach(card => {
+                    card.addEventListener('click', this.handleCardSelect.bind(this));
+                });
+
+                showResultsBtn.addEventListener('click', this.showResults.bind(this));
+                resetBtn.addEventListener('click', this.resetGame.bind(this));
+            }
+
+            handleCardSelect(e) {
+                const card = e.currentTarget;
+                const category = card.dataset.category;
+                const points = parseInt(card.dataset.points);
+
+                // Se la carta è già selezionata, non fare nulla
+                if (card.classList.contains('selected')) return;
+
+                // Deseleziona altre carte della stessa categoria
+                document.querySelectorAll(`[data-category="${category}"]`).forEach(c => {
+                    c.classList.remove('selected');
+                });
+
+                // Seleziona questa carta
+                card.classList.add('selected');
+
+                // Salva la selezione
+                if (this.selections[category]) {
+                    this.totalPoints -= this.selections[category].points;
+                }
+
+                this.selections[category] = {
+                    points: points,
+                    title: card.querySelector('.card-title').textContent,
+                    icon: card.querySelector('.card-icon').textContent
+                };
+
+                this.totalPoints += points;
+                this.updateProgress();
+                this.checkCompletion();
+            }
+
+            updateProgress() {
+                const progress = Math.min((this.totalPoints / this.maxPoints) * 100, 100);
+                const selectionsCount = Object.keys(this.selections).length;
+
+                document.getElementById('progressFill').style.width = `${progress}%`;
+                document.getElementById('progressValue').textContent = Math.round(progress);
+                document.getElementById('selectionsCount').textContent = 
+                    `Scelte fatte: ${selectionsCount}/${this.requiredSelections}`;
+
+                // Cambia colore della barra in base al punteggio
+                const progressFill = document.getElementById('progressFill');
+                if (progress >= 80) {
+                    progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
+                } else if (progress >= 60) {
+                    progressFill.style.background = 'linear-gradient(90deg, #FF9800, #FFB74D)';
+                } else {
+                    progressFill.style.background = 'linear-gradient(90deg, #f44336, #FF5722)';
+                }
+            }
+
+            checkCompletion() {
+                const selectionsCount = Object.keys(this.selections).length;
+                const showResultsBtn = document.getElementById('showResultsBtn');
+                
+                if (selectionsCount >= this.requiredSelections) {
+                    showResultsBtn.disabled = false;
+                    
+                    // Disabilita le carte non selezionate
+                    document.querySelectorAll('.card:not(.selected)').forEach(card => {
+                        card.classList.add('disabled');
+                    });
+                }
+            }
+
+            showResults() {
+                const finalPercentage = Math.min(Math.round((this.totalPoints / this.maxPoints) * 100), 100);
+                
+                document.getElementById('finalScore').textContent = `${finalPercentage}/100`;
+                document.getElementById('resultsSection').classList.add('show');
+                
+                this.showBadge(finalPercentage);
+                this.showChoicesSummary();
+                this.showFeedback(finalPercentage);
+                
+                // Scroll to results
+                document.getElementById('resultsSection').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }
+
+            showBadge(percentage) {
+                const badge = document.getElementById('badge');
+                
+                if (percentage >= 80) {
+                    badge.className = 'badge excellent';
+                    badge.textContent = '🌟 Brand Sostenibile Eccellente!';
+                } else if (percentage >= 60) {
+                    badge.className = 'badge good';
+                    badge.textContent = '⚡ Brand Sostenibile in Crescita';
+                } else {
+                    badge.className = 'badge improvement';
+                    badge.textContent = '🎯 Brand con Potenziale di Miglioramento';
+                }
+            }
+
+            showChoicesSummary() {
+                const choicesList = document.getElementById('choicesList');
+                const categories = ['channel', 'warehouse', 'energy', 'materials', 'packaging'];
+                
+                choicesList.innerHTML = '';
+                
+                categories.forEach(category => {
+                    if (this.selections[category]) {
+                        const choice = this.selections[category];
+                        const choiceItem = document.createElement('div');
+                        choiceItem.className = 'choice-item';
+                        choiceItem.innerHTML = `
+                            <span class="choice-icon">${choice.icon}</span>
+                            <span class="choice-text">${choice.title}</span>
+                            <span class="choice-points">+${choice.points}</span>
+                        `;
+                        choicesList.appendChild(choiceItem);
+                    }
+                });
+            }
+
+            showFeedback(percentage) {
+                const feedbackText = document.getElementById('feedbackText');
+                
+                if (percentage >= 80) {
+                    feedbackText.innerHTML = `
+                        <strong>🎉 Congratulazioni!</strong><br><br>
+                        Il tuo brand ha tutte le caratteristiche per essere un leader nella sostenibilità! 
+                        Hai fatto scelte strategiche eccellenti che ti permetteranno di:
+                        <br>• Attrarre consumatori consapevoli
+                        <br>• Ridurre l'impatto ambientale
+                        <br>• Costruire un valore duraturo nel tempo
+                        <br><br>
+                        <em>Il tuo brand è pronto per il futuro! 🌍</em>
+                    `;
+                } else if (percentage >= 60) {
+                    feedbackText.innerHTML = `
+                        <strong>👍 Ottimo inizio!</strong><br><br>
+                        Il tuo brand ha una buona base sostenibile ma c'è ancora spazio per migliorare. 
+                        Considera di investire maggiormente in:
+                        <br>• Tecnologie più avanzate (automazione, energie rinnovabili)
+                        <br>• Materiali innovativi riciclati
+                        <br>• Soluzioni logistics più efficienti
+                        <br><br>
+                        <em>Sei sulla strada giusta! 🚀</em>
+                    `;
+                } else {
+                    feedbackText.innerHTML = `
+                        <strong>🎯 Potenziale da sviluppare</strong><br><br>
+                        Il tuo brand ha le basi ma necessita di scelte più coraggiose per competere nel mercato sostenibile. 
+                        Ti consigliamo di rivedere:
+                        <br>• Le tecnologie utilizzate
+                        <br>• I materiali scelti
+                        <br>• L'approccio all'energia
+                        <br><br>
+                        <em>Ricorda: i consumatori premiano sempre più la sostenibilità! 🌱</em>
+                    `;
+                }
+            }
+
+            resetGame() {
+                // Reset variabili
+                this.selections = {};
+                this.totalPoints = 0;
+                
+                // Reset UI
+                document.querySelectorAll('.card').forEach(card => {
+                    card.classList.remove('selected', 'disabled');
+                });
+                
+                document.getElementById('showResultsBtn').disabled = true;
+                document.getElementById('resultsSection').classList.remove('show');
+                
+                this.updateProgress();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Inizializza il gioco
+        document.addEventListener('DOMContentLoaded', () => {
+            new BrandLauncher();
+        });
+    </script>
+</body>
+</html>
