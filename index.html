@@ -354,7 +354,6 @@
         </div>
 
         <div class="game-area">
-            <!-- CATEGORIA 1: CANALE DI VENDITA -->
             <div class="category">
                 <div class="category-header">
                     🏬 CANALE DI VENDITA - Come vendi i tuoi prodotti?
@@ -373,7 +372,6 @@
                 </div>
             </div>
 
-            <!-- CATEGORIA 2: GESTIONE MAGAZZINO -->
             <div class="category">
                 <div class="category-header">
                     📦 GESTIONE MAGAZZINO - Come organizzi la logistica?
@@ -392,7 +390,6 @@
                 </div>
             </div>
 
-            <!-- CATEGORIA 3: FONTE ENERGETICA -->
             <div class="category">
                 <div class="category-header">
                     ⚡ ENERGIA - Quale fonte scegli per alimentare le operazioni?
@@ -411,7 +408,6 @@
                 </div>
             </div>
 
-            <!-- CATEGORIA 4: MATERIALI -->
             <div class="category">
                 <div class="category-header">
                     🧵 MATERIALI - Che tessuti usi per i tuoi capi?
@@ -430,7 +426,6 @@
                 </div>
             </div>
 
-            <!-- CATEGORIA 5: PACKAGING -->
             <div class="category">
                 <div class="category-header">
                     📮 PACKAGING - Come confezioni i prodotti?
@@ -478,7 +473,7 @@
             constructor() {
                 this.selections = {};
                 this.totalPoints = 0;
-                this.maxPoints = 100; // 22+19+18+16+13 = 88 max possibili
+                this.maxPoints = 88;
                 this.requiredSelections = 5;
                 
                 this.initializeGame();
@@ -507,18 +502,14 @@
                 const category = card.dataset.category;
                 const points = parseInt(card.dataset.points);
 
-                // Se la carta è già selezionata, non fare nulla
                 if (card.classList.contains('selected')) return;
 
-                // Deseleziona altre carte della stessa categoria
                 document.querySelectorAll(`[data-category="${category}"]`).forEach(c => {
                     c.classList.remove('selected');
                 });
 
-                // Seleziona questa carta
                 card.classList.add('selected');
 
-                // Salva la selezione
                 if (this.selections[category]) {
                     this.totalPoints -= this.selections[category].points;
                 }
@@ -543,7 +534,6 @@
                 document.getElementById('selectionsCount').textContent = 
                     `Scelte fatte: ${selectionsCount}/${this.requiredSelections}`;
 
-                // Cambia colore della barra in base al punteggio
                 const progressFill = document.getElementById('progressFill');
                 if (progress >= 80) {
                     progressFill.style.background = 'linear-gradient(90deg, #4CAF50, #8BC34A)';
@@ -561,7 +551,6 @@
                 if (selectionsCount >= this.requiredSelections) {
                     showResultsBtn.disabled = false;
                     
-                    // Disabilita le carte non selezionate
                     document.querySelectorAll('.card:not(.selected)').forEach(card => {
                         card.classList.add('disabled');
                     });
@@ -578,7 +567,6 @@
                 this.showChoicesSummary();
                 this.showFeedback(finalPercentage);
                 
-                // Scroll to results
                 document.getElementById('resultsSection').scrollIntoView({ 
                     behavior: 'smooth' 
                 });
@@ -625,46 +613,44 @@
                 
                 if (percentage >= 80) {
                     feedbackText.innerHTML = `
-                        <strong>🎉 Congratulazioni!</strong><br><br>
+                        <strong>Congratulazioni!</strong><br><br>
                         Il tuo brand ha tutte le caratteristiche per essere un leader nella sostenibilità! 
                         Hai fatto scelte strategiche eccellenti che ti permetteranno di:
                         <br>• Attrarre consumatori consapevoli
                         <br>• Ridurre l'impatto ambientale
                         <br>• Costruire un valore duraturo nel tempo
                         <br><br>
-                        <em>Il tuo brand è pronto per il futuro! 🌍</em>
+                        <em>Il tuo brand è pronto per il futuro!</em>
                     `;
                 } else if (percentage >= 60) {
                     feedbackText.innerHTML = `
-                        <strong>👍 Ottimo inizio!</strong><br><br>
+                        <strong>Ottimo inizio!</strong><br><br>
                         Il tuo brand ha una buona base sostenibile ma c'è ancora spazio per migliorare. 
                         Considera di investire maggiormente in:
                         <br>• Tecnologie più avanzate (automazione, energie rinnovabili)
                         <br>• Materiali innovativi riciclati
                         <br>• Soluzioni logistics più efficienti
                         <br><br>
-                        <em>Sei sulla strada giusta! 🚀</em>
+                        <em>Sei sulla strada giusta!</em>
                     `;
                 } else {
                     feedbackText.innerHTML = `
-                        <strong>🎯 Potenziale da sviluppare</strong><br><br>
+                        <strong>Potenziale da sviluppare</strong><br><br>
                         Il tuo brand ha le basi ma necessita di scelte più coraggiose per competere nel mercato sostenibile. 
                         Ti consigliamo di rivedere:
                         <br>• Le tecnologie utilizzate
                         <br>• I materiali scelti
                         <br>• L'approccio all'energia
                         <br><br>
-                        <em>Ricorda: i consumatori premiano sempre più la sostenibilità! 🌱</em>
+                        <em>Ricorda: i consumatori premiano sempre più la sostenibilità!</em>
                     `;
                 }
             }
 
             resetGame() {
-                // Reset variabili
                 this.selections = {};
                 this.totalPoints = 0;
                 
-                // Reset UI
                 document.querySelectorAll('.card').forEach(card => {
                     card.classList.remove('selected', 'disabled');
                 });
@@ -674,12 +660,10 @@
                 
                 this.updateProgress();
                 
-                // Scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // Inizializza il gioco
         document.addEventListener('DOMContentLoaded', () => {
             new BrandLauncher();
         });
